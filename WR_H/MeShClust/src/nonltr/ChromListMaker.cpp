@@ -108,6 +108,8 @@ const vector<Chromosome *> * ChromListMaker::makeChromOneDigitList() {
 			chrom = new ChromosomeOneDigit();
 			chrom->setHeader(line);
 		} else {
+			cout << "Reading: " << line << endl;
+			
 			chrom->appendToSequence(line);
 		}
 	}

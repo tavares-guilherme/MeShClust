@@ -21,6 +21,7 @@
  */
 #include <iostream>
 #include <map>
+#include <list>
 
 #include "Chromosome.h"
 #include "ChromosomeOneDigit.h"
@@ -98,73 +99,127 @@ ChromosomeOneDigit::~ChromosomeOneDigit() {
 /**
  * This method converts nucleotides in the segments to single digit codes
  */
-void ChromosomeOneDigit::encodeNucleotides() {
+/*	void ChromosomeOneDigit::encodeNucleotides() {
+	cout << "Printing segment List" << endl;
+	this->printSegmentList();
+	cout << "segment printed" << endl;
 
-  for (int s = 0; s < segment->size(); s++) {
-    int segStart = segment->at(s)->at(0);
-    int segEnd = segment->at(s)->at(1);
-    for (int i = segStart; i <= segEnd; i++) {
-      if (codes->count(base[i]) > 0) {
-	base[i] = codes->at(base[i]);
-      } else {
-	string msg = "Invalid nucleotide: ";
-	msg.append(1, base[i]);
-	throw InvalidInputException(msg);
-      }
-    }
-  }
+	int aux;
+	char state[3];
+	int count;
+
+	for (int s = 0; s < segment->size(); s++) {
+		// Reset auxiliar variables
+		count = 0;
+		state[0] = '0';state[1] = '0'; state[2] = '0';
+		
+		int segStart = segment->at(s)->at(0);
+		int segEnd = segment->at(s)->at(1);
+
+		for (int i = segStart; i <= segEnd; i++) {			
+			
+			if (codes->count(base[i]) > 0) {
+				base[i] = codes->at(base[i]);
+			} else {
+				cout << "reached here\n";
+				string msg = "Invalid nucleotide: ";
+				msg.append(1, base[i]);
+				throw InvalidInputException(msg);
+			}
+
+			/* MyCode
+			if (codes->count(base[i]) > 0) {
+				state[count] = base[i];
+				count++;
+			} else if (base[i] == ','){
+				aux = atoi(state);
+				formatted_states.push_back(aux);
+			}else{
+				string msg = "Invalid nucleotide: ";
+				msg.append(1, base[i]);
+				throw InvalidInputException(msg);
+			}
+		}
+  	}
+
+	// Set last base of the sequence:
+	//aux = atoi(state);
+	//formatted_states.push_back(aux);
 
   // Digitize skipped segments
   int segNum = segment->size();
   if(segNum > 0){
     // The first interval - before the first segment
     int segStart = 0; 
-    int segEnd = segment->at(0)->at(0)-1; 
+    int segEnd = formatted_states.size(); 
 
     for (int s = 0; s <= segNum; s++) {      
-      for (int i = segStart; i <= segEnd; i++) {
-	char c = base[i];
-	if(c != 'N'){
-	  if (codes->count(c) > 0) {
-	    base[i] = codes->at(c);
-	  } else {
-	    string msg = "Invalid nucleotide: ";
-	    msg.append(1, c);
-	    throw InvalidInputException(msg);
-	  }
-	}
-      }
+		
+		for (int i = segStart; i <= segEnd; i++) {
+			char c = base[i];
+			if(c != 'N'){
+				if (codes->count(c) > 0) {
+					base[i] = codes->at(c);
+				} else {
+					string msg = "Invalid nucleotide: ";
+					msg.append(1, c);
+					throw InvalidInputException(msg);
+				}
+			}
+		}
 
-      // The regular intervals between two segments
-      if(s < segNum-1){
-	segStart = segment->at(s)->at(1)+1;
-	segEnd = segment->at(s+1)->at(0)-1;
-      }
-      // The last interval - after the last segment
-      else if(s == segNum - 1){
-	segStart = segment->at(s)->at(1)+1;
-	segEnd = base.size()-1;
-      } 
+		// The regular intervals between two segments
+		if(s < segNum-1){
+		segStart = segment->at(s)->at(1)+1;
+		segEnd = segment->at(s+1)->at(0)-1;
+		}
+		// The last interval - after the last segment
+		else if(s == segNum - 1){
+		segStart = segment->at(s)->at(1)+1;
+		segEnd = base.size()-1;
+		} 
     } 
   }
-}
-
-/*
+}*/
 void ChromosomeOneDigit::encodeNucleotides() {
 	int seqLen = base.size();
-
+	int aux;
+	char state[3];
+	int count = 0;
+	
+	formatted_states = new vector<int>;
+	this->printFormattedStates();
 	for (int i = 0; i < seqLen; i++) {
+		
 		if (codes->count(base[i]) > 0) {
-			base[i] = codes->at(base[i]);
-		} else {
+			state[count] = base[i];
+			count++;
+		} else if (base[i] == ','){
+			aux = atoi(state);
+			formatted_states->push_back(aux);
+			count=0;
+		}else{
 			string msg = "Invalid nucleotide: ";
 			msg.append(1, base[i]);
 			throw InvalidInputException(msg);
 		}
 	}
 
+	aux = atoi(state);
+	formatted_states->push_back(aux);
+	this->printFormattedStates();
+
 }
-*/
+
+void ChromosomeOneDigit::printFormattedStates() {
+	int l = formatted_states->size();
+
+	cout << "State Sequences: = " << l << endl;
+	for(int i = 0; i < l; i++){
+		cout << formatted_states->at(i) << "\t";
+	}
+	cout << endl;
+}
 
 /**
  * Cannot be called on already finalized object.

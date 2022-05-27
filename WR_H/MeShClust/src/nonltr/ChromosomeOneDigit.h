@@ -16,12 +16,15 @@ class ChromosomeOneDigit: public Chromosome {
 
 private:
 	/* Fields */
-	map<char, int> * codes;
+	map<char, int> * codes;	
+	/*List of ints that represents the sequence of states*/
+  	vector<int> *formatted_states;
 
 	/* Methods */
 	void help();
 	void buildCodes();
 	void encodeNucleotides();
+	void printFormattedStates();
 
 	void makeReverse();
 	void makeComplement();
@@ -34,6 +37,7 @@ public:
 	ChromosomeOneDigit(string, string);
 	virtual ~ChromosomeOneDigit();
 	virtual void finalize();
+	vector<int> getFormattedStates();
 
 	void makeR();
 	void makeRC();

@@ -102,7 +102,7 @@ void Chromosome::help(int len, bool canMerge) {
 	segment = new vector<vector<int> *>();
 //	segment->reserve(100);
 
-	toUpperCase();
+	//toUpperCase();
 	removeN();
 	if (canMerge) {
 		mergeSegments();
