@@ -184,7 +184,7 @@ ChromosomeOneDigit::~ChromosomeOneDigit() {
 void ChromosomeOneDigit::encodeNucleotides() {
 	int seqLen = base.size();
 	int aux;
-	char state[3];
+	char state[4];
 	int count = 0;
 	
 	formatted_states = new vector<int>;
@@ -195,6 +195,7 @@ void ChromosomeOneDigit::encodeNucleotides() {
 			state[count] = base[i];
 			count++;
 		} else if (base[i] == ','){
+			state[count] = '\0';
 			aux = atoi(state);
 			formatted_states->push_back(aux);
 			count=0;
@@ -205,8 +206,11 @@ void ChromosomeOneDigit::encodeNucleotides() {
 		}
 	}
 
+	state[count] = '\0';
 	aux = atoi(state);
 	formatted_states->push_back(aux);
+
+
 	this->printFormattedStates();
 
 }

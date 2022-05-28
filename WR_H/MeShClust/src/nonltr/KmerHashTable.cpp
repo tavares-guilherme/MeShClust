@@ -18,7 +18,7 @@ using namespace exception;
 using namespace nonltr;
 using namespace utility;
 
-#define N_DIGITS 10
+#define N_DIGITS 20
 
 template<class I, class V>
 KmerHashTable<I, V>::KmerHashTable(int keyLength) {
